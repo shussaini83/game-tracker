@@ -100,6 +100,15 @@ export function useGameState() {
       // Don't add to an already-complete over — caller should use startNextOver first
       if (legalCount(over.balls) >= 6) return prev;
       over.balls.push({ runs, isWide, isNoBall, isOut });
+      // If chasing (innings 2), check if the target has been reached
+      if (next.currentInnings === 1) {
+        const inn1 = next.innings[0];
+        const inn1Score = inn1.overs.reduce((s, o) => s + overRuns(o.balls), 0);
+        const inn2Score = inn.overs.reduce((s, o) => s + overRuns(o.balls), 0);
+        if (inn2Score > inn1Score) {
+          next.phase = 'done';
+        }
+      }
       return next;
     });
   }
