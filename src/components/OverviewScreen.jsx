@@ -7,12 +7,14 @@ export default function OverviewScreen({
   overRuns,
   overWides,
   overNoBalls,
+  overWickets,
   battingTeamName,
   onBack,
 }) {
   const innings = state.innings[state.currentInnings];
   const allOvers = innings ? innings.overs : [];
   const totalRuns = allOvers.reduce((s, o) => s + overRuns(o.balls), 0);
+  const totalWickets = allOvers.reduce((s, o) => s + overWickets(o.balls), 0);
 
   // Also show previous innings if in innings2 or done
   const prevInnings = state.currentInnings === 1 || state.phase === 'done'
@@ -21,6 +23,9 @@ export default function OverviewScreen({
   const prevTeamName = state.team1;
   const prevTotalRuns = prevInnings
     ? prevInnings.overs.reduce((s, o) => s + overRuns(o.balls), 0)
+    : 0;
+  const prevTotalWickets = prevInnings
+    ? prevInnings.overs.reduce((s, o) => s + overWickets(o.balls), 0)
     : 0;
 
   return (
@@ -44,7 +49,10 @@ export default function OverviewScreen({
           <section>
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-slate-300 font-semibold text-base">{prevTeamName}</h2>
-              <span className="text-green-400 font-bold text-lg">{prevTotalRuns}</span>
+              <span className="text-green-400 font-bold text-lg">
+                {prevTotalRuns}
+                <span className="text-slate-400 font-semibold text-base">/{prevTotalWickets}</span>
+              </span>
             </div>
             <div className="space-y-3">
               {prevInnings.overs.map((over, i) => (
@@ -55,6 +63,7 @@ export default function OverviewScreen({
                   overRuns={overRuns}
                   overWides={overWides}
                   overNoBalls={overNoBalls}
+                  overWickets={overWickets}
                   overNumber={i + 1}
                   totalOvers={state.overs}
                 />
@@ -72,7 +81,10 @@ export default function OverviewScreen({
                 <span className="ml-2 text-xs bg-green-800 text-green-300 px-2 py-0.5 rounded-full">Live</span>
               )}
             </h2>
-            <span className="text-green-400 font-bold text-lg">{totalRuns}</span>
+            <span className="text-green-400 font-bold text-lg">
+              {totalRuns}
+              <span className="text-slate-400 font-semibold text-base">/{totalWickets}</span>
+            </span>
           </div>
           <div className="space-y-3">
             {allOvers.length === 0 && (
@@ -86,6 +98,7 @@ export default function OverviewScreen({
                 overRuns={overRuns}
                 overWides={overWides}
                 overNoBalls={overNoBalls}
+                overWickets={overWickets}
                 overNumber={i + 1}
                 totalOvers={state.overs}
               />

@@ -1,8 +1,10 @@
-export default function GameDoneScreen({ state, overRuns, onNewGame, onShowOverview }) {
+export default function GameDoneScreen({ state, overRuns, overWickets, onNewGame, onShowOverview }) {
   const inn1 = state.innings[0];
   const inn2 = state.innings[1];
   const score1 = inn1 ? inn1.overs.reduce((s, o) => s + overRuns(o.balls), 0) : 0;
   const score2 = inn2 ? inn2.overs.reduce((s, o) => s + overRuns(o.balls), 0) : 0;
+  const wickets1 = inn1 ? inn1.overs.reduce((s, o) => s + overWickets(o.balls), 0) : 0;
+  const wickets2 = inn2 ? inn2.overs.reduce((s, o) => s + overWickets(o.balls), 0) : 0;
 
   let result;
   if (score1 > score2) result = `${state.team1} wins by ${score1 - score2} runs!`;
@@ -17,11 +19,17 @@ export default function GameDoneScreen({ state, overRuns, onNewGame, onShowOverv
       <div className="bg-slate-800 rounded-2xl p-5 w-full max-w-xs mb-5">
         <div className="flex justify-between items-center mb-3">
           <span className="text-slate-300 font-medium">{state.team1}</span>
-          <span className="text-green-400 font-bold text-xl">{score1}</span>
+          <span className="text-green-400 font-bold text-xl">
+            {score1}
+            <span className="text-slate-400 font-semibold text-base">/{wickets1}</span>
+          </span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-slate-300 font-medium">{state.team2}</span>
-          <span className="text-green-400 font-bold text-xl">{score2}</span>
+          <span className="text-green-400 font-bold text-xl">
+            {score2}
+            <span className="text-slate-400 font-semibold text-base">/{wickets2}</span>
+          </span>
         </div>
       </div>
 
