@@ -1,15 +1,22 @@
 export default function BallPill({ ball }) {
   if (ball.isWide) {
     return (
-      <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-yellow-500 text-slate-900 text-xs font-bold">
+      <span className={`inline-flex items-center justify-center w-9 h-9 rounded-full bg-yellow-500 text-slate-900 text-xs font-bold ${ball.isOut ? 'ring-2 ring-orange-400' : ''}`}>
         W{ball.runs > 0 ? `+${ball.runs}` : ''}
       </span>
     );
   }
   if (ball.isNoBall) {
     return (
-      <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-red-500 text-white text-xs font-bold">
+      <span className={`inline-flex items-center justify-center w-9 h-9 rounded-full bg-red-500 text-white text-xs font-bold ${ball.isOut ? 'ring-2 ring-orange-400' : ''}`}>
         NB{ball.runs > 0 ? `+${ball.runs}` : ''}
+      </span>
+    );
+  }
+  if (ball.isOut) {
+    return (
+      <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-orange-500 text-white text-xs font-bold ring-2 ring-orange-300">
+        {ball.runs > 0 ? `${ball.runs}†` : '†'}
       </span>
     );
   }

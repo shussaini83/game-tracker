@@ -1,10 +1,11 @@
 import BallPill from './BallPill';
 
-export default function OverStrip({ balls, legalCount, overRuns, overWides, overNoBalls, overNumber, totalOvers }) {
+export default function OverStrip({ balls, legalCount, overRuns, overWides, overNoBalls, overWickets, overNumber, totalOvers }) {
   const legal = legalCount(balls);
   const runs = overRuns(balls);
   const wides = overWides(balls);
   const noBalls = overNoBalls(balls);
+  const wickets = overWickets(balls);
 
   return (
     <div className="bg-slate-800 rounded-2xl p-4">
@@ -41,6 +42,11 @@ export default function OverStrip({ balls, legalCount, overRuns, overWides, over
         {noBalls > 0 && (
           <span className="text-red-400">
             <span className="font-semibold">{noBalls}</span> no ball{noBalls !== 1 ? 's' : ''}
+          </span>
+        )}
+        {wickets > 0 && (
+          <span className="text-orange-400">
+            <span className="font-semibold">{wickets}</span> wicket{wickets !== 1 ? 's' : ''}
           </span>
         )}
       </div>

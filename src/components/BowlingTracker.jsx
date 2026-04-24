@@ -18,21 +18,27 @@ export default function BowlingTracker({
   overRuns,
   overWides,
   overNoBalls,
+  overWickets,
   onShowOverview,
   onNewGame,
 }) {
   const [isNoBall, setIsNoBall] = useState(false);
   const [isWide, setIsWide] = useState(false);
+  const [isOut, setIsOut] = useState(false);
 
   function handleRun(runs) {
-    recordBall(runs, isWide, isNoBall);
+    recordBall(runs, isWide, isNoBall, isOut);
     setIsNoBall(false);
     setIsWide(false);
+    setIsOut(false);
   }
 
   const innings = state.innings[state.currentInnings];
   const totalInningsRuns = innings
     ? innings.overs.reduce((s, o) => s + overRuns(o.balls), 0)
+    : 0;
+  const totalInningsWickets = innings
+    ? innings.overs.reduce((s, o) => s + overWickets(o.balls), 0)
     : 0;
 
   const overNumber = currentOvers.length;
@@ -59,7 +65,10 @@ export default function BowlingTracker({
           </div>
           <div className="text-right">
             <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">Score</div>
-            <div className="text-green-400 font-bold text-3xl">{totalInningsRuns}</div>
+            <div className="text-green-400 font-bold text-3xl">
+              {totalInningsRuns}
+              <span className="text-slate-400 text-xl font-semibold">/{totalInningsWickets}</span>
+            </div>
           </div>
         </div>
         <div className="flex gap-2">
@@ -86,6 +95,7 @@ export default function BowlingTracker({
           overRuns={overRuns}
           overWides={overWides}
           overNoBalls={overNoBalls}
+          overWickets={overWickets}
           overNumber={overNumber}
           totalOvers={totalOvers}
         />
@@ -136,14 +146,28 @@ export default function BowlingTracker({
               >
                 Wide
               </button>
+              <button
+                onClick={() => setIsOut(v => !v)}
+                className={`flex-1 rounded-2xl py-4 text-base font-bold transition-colors ${
+                  isOut
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-slate-700 text-slate-300 border border-slate-600'
+                }`}
+              >
+                Out
+              </button>
             </div>
 
             {/* Active modifier label */}
-            {(isNoBall || isWide) && (
+            {(isNoBall || isWide || isOut) && (
               <div className={`text-center text-sm font-semibold rounded-xl py-2 ${
-                isNoBall ? 'bg-red-900 text-red-300' : 'bg-yellow-900 text-yellow-300'
+                isNoBall ? 'bg-red-900 text-red-300'
+                : isWide ? 'bg-yellow-900 text-yellow-300'
+                : 'bg-orange-900 text-orange-300'
               }`}>
-                {isNoBall ? 'No Ball — tap runs scored' : 'Wide — tap runs scored (0 = just wide)'}
+                {isNoBall ? 'No Ball — tap runs scored'
+                  : isWide ? 'Wide — tap runs scored (0 = just wide)'
+                  : 'Out — tap runs scored on this ball'}
               </div>
             )}
 

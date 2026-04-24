@@ -22,6 +22,7 @@ export default function App() {
       <GameDoneScreen
         state={state}
         overRuns={game.overRuns}
+        overWickets={game.overWickets}
         onNewGame={game.newGame}
         onShowOverview={() => setScreen('overview')}
       />
@@ -37,6 +38,7 @@ export default function App() {
         overRuns={game.overRuns}
         overWides={game.overWides}
         overNoBalls={game.overNoBalls}
+        overWickets={game.overWickets}
         battingTeamName={game.battingTeamName}
         onBack={() => setScreen('main')}
       />
@@ -48,6 +50,7 @@ export default function App() {
       <InningsTransition
         state={state}
         overRuns={game.overRuns}
+        overWickets={game.overWickets}
         onContinue={() => setShownTransition(true)}
       />
     );
@@ -69,6 +72,7 @@ export default function App() {
       overRuns={game.overRuns}
       overWides={game.overWides}
       overNoBalls={game.overNoBalls}
+      overWickets={game.overWickets}
       onShowOverview={() => setScreen('overview')}
       onNewGame={game.newGame}
     />

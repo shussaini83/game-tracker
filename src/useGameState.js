@@ -4,7 +4,7 @@ const STORAGE_KEY = 'cricket-tracker-v1';
 
 const emptyOver = () => ({ balls: [] });
 
-// A ball: { runs, isWide, isNoBall }
+// A ball: { runs, isWide, isNoBall, isOut }
 // Legal ball = not wide and not no-ball
 function isLegal(ball) {
   return !ball.isWide && !ball.isNoBall;
@@ -24,6 +24,10 @@ function overWides(balls) {
 
 function overNoBalls(balls) {
   return balls.filter(b => b.isNoBall).length;
+}
+
+function overWickets(balls) {
+  return balls.filter(b => b.isOut).length;
 }
 
 function isOverComplete(balls, totalOversPerSide) {
@@ -87,7 +91,7 @@ export function useGameState() {
     });
   }
 
-  function recordBall(runs, isWide, isNoBall) {
+  function recordBall(runs, isWide, isNoBall, isOut = false) {
     setState(prev => {
       const next = JSON.parse(JSON.stringify(prev));
       const inn = next.innings[next.currentInnings];
@@ -95,7 +99,7 @@ export function useGameState() {
       const over = inn.overs[inn.overs.length - 1];
       // Don't add to an already-complete over — caller should use startNextOver first
       if (legalCount(over.balls) >= 6) return prev;
-      over.balls.push({ runs, isWide, isNoBall });
+      over.balls.push({ runs, isWide, isNoBall, isOut });
       return next;
     });
   }
@@ -195,6 +199,7 @@ export function useGameState() {
     overRuns,
     overWides,
     overNoBalls,
+    overWickets,
     isLegal,
   };
 }
